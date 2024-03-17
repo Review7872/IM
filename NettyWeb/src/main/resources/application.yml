@@ -1,0 +1,26 @@
+server:
+  port: 8081
+netty:
+  port: 8181
+  bossGroupThread: 8
+  workerGroupThread: 16
+  webSocketPath: /netty_web
+spring:
+  application:
+    name: nettyWeb
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 192.168.0.103:8848
+        username: nacos
+        password: '031027'
+  data:
+    redis:
+      host: 101.201.47.132
+      port: 6379
+      password: '031027'
+      jedis:
+        pool:
+          enabled: true
+          max-active: 4
+          min-idle: 1
