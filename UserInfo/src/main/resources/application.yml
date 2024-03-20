@@ -3,9 +3,10 @@ server:
 dubbo:
   protocol:
     name: dubbo
-    port: 20883
+    port: 28083
   application:
-    name: userInfo
+    name: userInfoDubbo
+    qos-enable: false
   registry:
     address: nacos://127.0.0.1:8848
     username: nacos
@@ -104,3 +105,9 @@ spring:
         allow: 127.0.0.1
         # IP黑名单（共同存在时，deny优先于allow）
         deny:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+        username: nacos
+        password: '031027'

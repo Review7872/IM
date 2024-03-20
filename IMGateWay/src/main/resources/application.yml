@@ -1,0 +1,54 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: IMGateWay
+  cloud:
+    nacos:
+      discovery:
+        username: nacos
+        password: '031027'
+        server-addr: localhost:8848
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      # 全局的跨域配置
+      globalcors:
+        # 解决options请求被拦截问题
+        add-to-simple-url-handler-mapping: true
+        cors-configurations:
+          # 拦截的请求
+          '[/**]':
+            # 允许跨域的请求
+            #allowedOrigins: "*" # spring boot2.4以前的配置
+            allowedOriginPatterns: "*" # spring boot2.4以后的配置
+            # 允许请求中携带的头信息
+            allowedHeaders: "*"
+            # 运行跨域的请求方式
+            allowedMethods: "*"
+            # 是否允许携带cookie
+            allowCredentials: true
+            # 跨域检测的有效期,单位s
+            maxAge: 3600
+      routes:
+        - id: userLogin
+          uri: lb://userInfo
+          predicates:
+            - Path=/info/userInfo/userLogin
+        - id: userReg
+          uri: lb://userInfo/insertUser
+          predicates:
+            - Path=/info/userInfo
+        - id: userInfo_route
+          uri: lb://userInfo
+          predicates:
+            - Path=/info/**
+        - id: msgHandler_route
+          uri: lb://msgHandler
+          predicates:
+            - Path=/msg/**
+        - id: wsRoute
+          uri: lb:ws://nettyWeb
+          predicates:
+            - Path=/nettyWeb/**

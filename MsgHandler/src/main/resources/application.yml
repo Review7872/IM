@@ -21,10 +21,11 @@ spring:
           min-idle: 1
 dubbo:
   protocol:
-    name: dubbo
     port: 28082
+    name: dubbo
   application:
-    name: msgHandler
+    name: msgHandlerDubbo
+    qos-enable: false
   registry:
     address: nacos://127.0.0.1:8848
     username: nacos

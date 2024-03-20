@@ -14,6 +14,6 @@ public class JedisPoolConfig {
 
     @Bean("localIp")
     public String localIp() throws UnknownHostException {
-        return InetAddress.getLocalHost().getHostAddress()+":"+port;
+        return InetAddress.getLocalHost().getHostAddress() + ":" + port;
     }
 }

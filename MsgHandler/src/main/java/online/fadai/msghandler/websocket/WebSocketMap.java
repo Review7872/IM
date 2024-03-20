@@ -1,4 +1,4 @@
-package online.fadai.msghandler.config;
+package online.fadai.msghandler.websocket;
 
 import jakarta.annotation.Resource;
 import lombok.Getter;
@@ -29,13 +29,13 @@ public class WebSocketMap {
     public void run() throws URISyntaxException {
         List<ServiceInstance> nettyWeb = discoveryClient.getInstances("nettyWeb");
         for (ServiceInstance serviceInstance : nettyWeb) {
-            String path = serviceInstance.getHost() + ":" + (serviceInstance.getPort() + 100);
+            String path = serviceInstance.getHost() + ":" + serviceInstance.getPort();
             if (!webSocketClientMap.containsKey(path)) {
-                URI uri = new URI("ws://" + path + "/netty_web");
-                WebSocketClient webSocketClient = new WebSocketClient();
+                URI uri = new URI("ws://" + path + "/nettyWeb?id=0");
+                WebSocketClient webSocketClient = new WebSocketClient(path);
                 webSocketClient.connect(uri);
                 webSocketClientMap.put(path, webSocketClient);
-                log.info("{}的连接已经成功建立", uri);
+                log.info("{}的连接已经成功建立", path);
             }
         }
     }

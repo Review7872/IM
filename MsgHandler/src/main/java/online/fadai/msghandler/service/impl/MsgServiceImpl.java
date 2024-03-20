@@ -2,8 +2,8 @@ package online.fadai.msghandler.service.impl;
 
 import com.alibaba.fastjson2.JSON;
 import jakarta.annotation.Resource;
-import online.fadai.msghandler.config.WebSocketClient;
-import online.fadai.msghandler.config.WebSocketMap;
+import online.fadai.msghandler.websocket.WebSocketClient;
+import online.fadai.msghandler.websocket.WebSocketMap;
 import online.fadai.pojo.Msg;
 import online.fadai.service.MsgService;
 import online.fadai.type.SetTypeReference;
@@ -24,7 +24,8 @@ public class MsgServiceImpl implements MsgService {
     @Override
     public int sendMsg(Msg msg) {
         if (msg.getType() == 101) {
-            String ipaddr = (String) redisTemplate.opsForHash().get(REDIS_HASH_ONLINE_NETTY, msg.getMsgReceiver());
+            //String ipaddr = (String) redisTemplate.opsForHash().get(REDIS_HASH_ONLINE_NETTY, Long.parseLong(msg.getMsgReceiver()));
+            String ipaddr = "192.168.14.1:18081";
             WebSocketClient webSocketClient = WebSocketMap.getWebSocketClientMap().get(ipaddr);
             if (webSocketClient == null) {
                 // todo 交付给MQ做离校消息处理
@@ -40,7 +41,8 @@ public class MsgServiceImpl implements MsgService {
         } else if (msg.getType() == 102) {
             Set<Long> receivers = JSON.parseObject(msg.getMsgReceiver(), SetTypeReference.getSetTypeReference().getType());
             for (Long receiver : receivers) {
-                String ipaddr = (String) redisTemplate.opsForHash().get(REDIS_HASH_ONLINE_NETTY, receiver);
+                //String ipaddr = (String) redisTemplate.opsForHash().get(REDIS_HASH_ONLINE_NETTY, receiver);
+                String ipaddr = "192.168.14.1:18081";
                 WebSocketClient webSocketClient = WebSocketMap.getWebSocketClientMap().get(ipaddr);
                 if (webSocketClient == null) {
                     // todo 交付给MQ做离校消息处理

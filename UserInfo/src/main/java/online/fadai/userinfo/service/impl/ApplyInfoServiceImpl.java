@@ -77,10 +77,11 @@ public class ApplyInfoServiceImpl implements ApplyInfoService {
     @Override
     public int updateResult(long applyKey, int applyResult) {
         ApplyInfo applyInfo = applyDao.selectApplyInfo(applyKey);
+        int i = applyDao.updateResult(applyKey, applyResult);
         if (applyResult == 2) {
             // 被拒绝
             msgService.sendMsg(new Msg(207,String.valueOf(applyKey),String.valueOf(applyInfo.getApplyA()),""));
-            return applyDao.updateResult(applyKey, applyResult);
+            return i;
         } else if (applyResult == 1) {
             // 同意了申请
             if (applyInfo.getApplyType() == 0) {
@@ -112,7 +113,7 @@ public class ApplyInfoServiceImpl implements ApplyInfoService {
             } else {
                 throw new RuntimeException();
             }
-            return applyDao.updateResult(applyKey, applyResult);
+            return i;
         } else {
             throw new RuntimeException();
         }

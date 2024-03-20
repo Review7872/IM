@@ -25,10 +25,10 @@ public class NettyServer implements ApplicationRunner {
     private int bossGroupThread;
     @Value("${netty.workerGroupThread}")
     private int workerGroupThread;
-    @Value("${netty.webSocketPath}")
-    private String webSocket;
     @Resource
     private GroupChatServerHandler groupChatServerHandler;
+    @Resource
+    private WebSocketHandler webSocketHandler;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -50,11 +50,11 @@ public class NettyServer implements ApplicationRunner {
                         // websocket数据块聚合器
                         pipeline.addLast(new HttpObjectAggregator(8192));
                         // http协议升级为ws
-                        pipeline.addLast(new WebSocketServerProtocolHandler(webSocket));
+                        pipeline.addLast(webSocketHandler);
                         pipeline.addLast(groupChatServerHandler);
                     }
                 });
-        log.info("端口号{}的Netty_Web服务已经启动", port);
+        log.info("端口号{}的NettyWeb服务已经启动", port);
         ChannelFuture channelFuture = bootstrap.bind(port).sync();
         channelFuture.channel().closeFuture().sync();
     }

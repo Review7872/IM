@@ -1,14 +1,19 @@
-package online.fadai.msghandler.config;
+package online.fadai.msghandler.websocket;
 
 import jakarta.websocket.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.Collection;
 
 @ClientEndpoint
 @Slf4j
 public class WebSocketClient {
+    private String path;
+    public WebSocketClient(String path) {
+        this.path = path;
+    }
 
     private Session session;
 
@@ -45,6 +50,8 @@ public class WebSocketClient {
 
     @OnClose
     public void onClose(Session session, CloseReason closeReason) {
+        WebSocketMap.getWebSocketClientMap().remove(this.path);
+        log.info("{}的连接已经断开",this.path);
     }
 
 
