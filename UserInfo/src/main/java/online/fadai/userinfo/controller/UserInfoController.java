@@ -18,6 +18,10 @@ public class UserInfoController {
     public String userLogin(@RequestBody UserInfo userInfo){
         return userInfoService.userLogin(userInfo);
     }
+    @PostMapping("/userForget")
+    public int userForget(){
+        return 1;
+    }
     @GetMapping("/onlineStatus")
     public int onlineStatus(String userJwt){
         return userInfoService.onlineStatus(userJwt);

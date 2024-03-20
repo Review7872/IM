@@ -23,7 +23,6 @@ import java.util.concurrent.locks.ReentrantLock;
 @Transactional
 @Service
 public class UserInfoServiceImpl implements UserInfoService {
-    public static final String REDIS_HASH_ONLINE_JWT = "JWT_HASH";
     @Resource
     private UserInfoDao userInfoDao;
     @Resource
@@ -56,7 +55,8 @@ public class UserInfoServiceImpl implements UserInfoService {
             throw new RuntimeException();
         }
         String jwtInfo = jwt.generateJwtToken(String.valueOf(info.getUserKey()));
-        redisTemplate.opsForHash().put(REDIS_HASH_ONLINE_JWT, info.getUserKey(), jwtInfo);
+        redisTemplate.opsForValue().set(jwtInfo,"");
+        redisTemplate.expire(jwtInfo,1,TimeUnit.DAYS);
         return jwtInfo;
     }
 
@@ -66,9 +66,7 @@ public class UserInfoServiceImpl implements UserInfoService {
      */
     @Override
     public int onlineStatus(String userJwt) {
-        Claims claimsFromJwt = jwt.getClaimsFromJwt(userJwt);
-        Long key = Long.parseLong(claimsFromJwt.get("userKey", String.class));
-        return redisTemplate.opsForHash().hasKey(REDIS_HASH_ONLINE_JWT, key) ? 1 : 0;
+        return Boolean.TRUE.equals(redisTemplate.hasKey(userJwt)) ?1:0;
     }
 
     @Override
