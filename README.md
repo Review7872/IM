@@ -119,7 +119,7 @@
 
 # <span id="6">6 系统架构图</span>
 
-<img src=".\static\IM.png" style="zoom: 67%;" />
+![](https://picgotuchaung.oss-cn-beijing.aliyuncs.com/202403210847117.png)
 
 # <span id="7">7 消息传输协议</span>
 
@@ -249,9 +249,9 @@ Netty是一个基于事件的Nio网络通信框架，这意味着用户消息必
 
 最终使用jakarta.websocket-api包成功达成目标。
 
-<img src=".\static\webSocket1.png" style="zoom: 67%;" />
+<img src="https://picgotuchaung.oss-cn-beijing.aliyuncs.com/202403210850282.png" style="zoom:80%;" />
 
-<img src=".\static\webSocket2.png" style="zoom: 67%;" />
+<img src="https://picgotuchaung.oss-cn-beijing.aliyuncs.com/202403210851998.png" style="zoom:80%;" />
 
 ### 4 离线消息不准确（设计）
 
