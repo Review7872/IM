@@ -1,0 +1,23 @@
+server:
+  port: 8084
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+        username: nacos
+        password: '031027'
+  application:
+    name: offlineMsg
+  data:
+    redis:
+      host: 101.201.47.132
+      port: 6379
+      password: '031027'
+      jedis:
+        pool:
+          enabled: true
+          max-active: 4
+          min-idle: 1
+rocketmq:
+  name-server: 192.168.14.136:9876

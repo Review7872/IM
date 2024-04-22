@@ -1,0 +1,19 @@
+server:
+  port: 8085
+spring:
+  cloud:
+    nacos:
+      discovery:
+        server-addr: 127.0.0.1:8848
+        username: nacos
+        password: '031027'
+  application:
+    name: storeMsg
+  elasticsearch:
+    uris: 127.0.0.1:9200
+rocketmq:
+  name-server: 192.168.14.136:9876
+elasticsearch:
+  port: 9200
+  host: 127.0.0.1
+  poolSize : 4

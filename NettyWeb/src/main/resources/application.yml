@@ -25,3 +25,10 @@ spring:
           enabled: true
           max-active: 4
           min-idle: 1
+rocketmq:
+  name-server: 192.168.14.136:9876
+  producer:
+    group: boot-group        # 生产者组别
+    send-message-timeout: 3000  # 消息发送的超时时间
+    retry-times-when-send-async-failed: 2  # 异步消息发送失败重试次数
+    max-message-size: 4194304       # 消息的最大长度

@@ -54,3 +54,11 @@ spring:
           uri: lb:ws://nettyWeb
           predicates:
             - Path=/nettyWeb/**
+        - id: storeMsg
+          uri: lb://storeMsg
+          predicates:
+            - Path=/storeMsg/**
+        - id: offlineMsg
+          uri: lb://offlineMsg
+          predicates:
+            - Path=/offlineMsg/**

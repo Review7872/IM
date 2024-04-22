@@ -12,6 +12,9 @@ import jakarta.annotation.Resource;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import online.fadai.pojo.Msg;
+import org.apache.rocketmq.client.producer.SendCallback;
+import org.apache.rocketmq.client.producer.SendResult;
+import org.apache.rocketmq.spring.core.RocketMQTemplate;
 import org.springframework.context.annotation.Scope;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -30,18 +33,30 @@ public class GroupChatServerHandler extends SimpleChannelInboundHandler<TextWebS
     private static final Map<Channel, Long> userInfoMap = new ConcurrentHashMap<>();
     @Resource
     private RedisTemplate<String,String> redisTemplate;
+    @Resource
+    private RocketMQTemplate rocketMQTemplate;
     public static final String REDIS_HASH_ONLINE_NETTY = "NETTY_ONLINE";
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, TextWebSocketFrame msg) throws Exception {
         Msg msgObj = JSON.parseObject(msg.text(), Msg.class);
         if (msgObj.getType() == 101 || msgObj.getType() == 102) {
+            String jsonString = JSON.toJSONString(msgObj);
             Channel receiverChannel = channelMap.get(Long.parseLong(msgObj.getMsgReceiver()));
             if (receiverChannel == null) {
-                // todo todo 交付给MQ做离校消息处理
+                rocketMQTemplate.asyncSend("offline",jsonString,new SendCallback() {
+                    @Override
+                    public void onSuccess(SendResult sendResult) {
+                    }
+
+                    @Override
+                    public void onException(Throwable e) {
+                        log.error("发送离线消息{}失败，原因如下：{}",jsonString,e.getMessage());
+                    }
+                });
                 return;
             }
-            receiverChannel.writeAndFlush(new TextWebSocketFrame(JSON.toJSONString(msgObj)));
+            receiverChannel.writeAndFlush(new TextWebSocketFrame(jsonString));
         }
     }
 
