@@ -106,6 +106,7 @@ public class ApplyInfoServiceImpl implements ApplyInfoService {
                 Set<Long> groupFriendSet = groupInfo.getGroupFriendSet();
                 groupFriendSet.add(applyInfo.getApplyA());
                 String friendJson = JSON.toJSONString(groupFriendSet);
+                redisTemplate.delete(String.valueOf(groupInfo.getGroupKey()));
                 groupDao.updateGroupFriend(applyInfo.getApplyB(), friendJson);
                 redisTemplate.delete(String.valueOf(groupInfo.getGroupKey()));
                 // 告诉所有群友群里来新人了，这里需要通知所有群友重新拉取列表，send方为新成员

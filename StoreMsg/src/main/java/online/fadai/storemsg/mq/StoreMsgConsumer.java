@@ -11,6 +11,7 @@ import org.apache.rocketmq.spring.core.RocketMQListener;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.UUID;
 
 @Component
 @RocketMQMessageListener(topic = "store",consumerGroup = "msg-consumer"
@@ -24,6 +25,7 @@ public class StoreMsgConsumer implements RocketMQListener<String> {
     public void onMessage(String message) {
         MsgES msgES = JSON.parseObject(message, MsgES.class);
         msgES.setDate(new Date().getTime());
+        msgES.setId(UUID.randomUUID().toString());
         msgDao.save(msgES);
     }
 }

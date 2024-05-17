@@ -18,6 +18,8 @@ import java.util.Date;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Document(indexName = "msg")
 public class MsgES {
+    @Field(type = FieldType.Text)
+    private String id;
     @Field(type = FieldType.Integer)
     private int type;
     @Field(type = FieldType.Text)

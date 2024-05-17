@@ -120,6 +120,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public int updateUsername(long userKey, String username) {
+        redisTemplate.delete(String.valueOf(userKey));
         int i = userInfoDao.updateUsername(userKey, username);
         redisTemplate.delete(String.valueOf(userKey));
         return i;
@@ -127,6 +128,7 @@ public class UserInfoServiceImpl implements UserInfoService {
 
     @Override
     public int updatePhoto(long userKey, String photo) {
+        redisTemplate.delete(String.valueOf(userKey));
         int i = userInfoDao.updatePhoto(userKey, photo);
         redisTemplate.delete(String.valueOf(userKey));
         return i;

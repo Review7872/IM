@@ -133,6 +133,7 @@ public class GroupInfoServiceImpl implements GroupInfoService {
         GroupInfo groupInfo = groupDao.selectGroupInfo(groupKey);
         Set<Long> groupFriendSet = groupInfo.getGroupFriendSet();
         groupFriendSet.remove(userKey);
+        redisTemplate.delete(String.valueOf(groupInfo.getGroupKey()));
         int y = groupDao.updateGroupFriend(groupKey, JSON.toJSONString(groupFriendSet));
         if (x + y != 2) {
             throw new RuntimeException();
@@ -143,6 +144,7 @@ public class GroupInfoServiceImpl implements GroupInfoService {
 
     @Override
     public int updateGroupMaster(GroupInfo groupInfo) {
+        redisTemplate.delete(String.valueOf(groupInfo.getGroupKey()));
         int i = groupDao.updateGroupMaster(groupInfo.getGroupKey(), groupInfo.getGroupMaster());
         redisTemplate.delete(String.valueOf(groupInfo.getGroupKey()));
         return i;
@@ -150,6 +152,8 @@ public class GroupInfoServiceImpl implements GroupInfoService {
 
     @Override
     public int updateGroupName(GroupInfo groupInfo) {
+        redisTemplate.delete(String.valueOf(groupInfo.getGroupKey()));
+        redisTemplate.delete(groupInfo.getGroupKey() + "Simple");
         int i = groupDao.updateGroupName(groupInfo.getGroupKey(), groupInfo.getGroupName());
         redisTemplate.delete(String.valueOf(groupInfo.getGroupKey()));
         redisTemplate.delete(groupInfo.getGroupKey() + "Simple");
@@ -158,6 +162,8 @@ public class GroupInfoServiceImpl implements GroupInfoService {
 
     @Override
     public int updateGroupPhoto(GroupInfo groupInfo) {
+        redisTemplate.delete(String.valueOf(groupInfo.getGroupKey()));
+        redisTemplate.delete(groupInfo.getGroupKey() + "Simple");
         int i = groupDao.updateGroupPhoto(groupInfo.getGroupKey(), groupInfo.getGroupPhoto());
         redisTemplate.delete(String.valueOf(groupInfo.getGroupKey()));
         redisTemplate.delete(groupInfo.getGroupKey() + "Simple");
@@ -166,6 +172,7 @@ public class GroupInfoServiceImpl implements GroupInfoService {
 
     @Override
     public int updateGroupFriend(GroupInfo groupInfo) {
+        redisTemplate.delete(String.valueOf(groupInfo.getGroupKey()));
         int i = groupDao.updateGroupFriend(groupInfo.getGroupKey(), groupInfo.getGroupFriend());
         redisTemplate.delete(String.valueOf(groupInfo.getGroupKey()));
         return i;
